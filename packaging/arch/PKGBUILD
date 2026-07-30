@@ -14,7 +14,7 @@ sha256sums=('SKIP')
 
 build() {
   cd "$srcdir/$pkgname"
-  python -m build \
+  /usr/bin/python -m build \
     --wheel \
     --no-isolation
 }
