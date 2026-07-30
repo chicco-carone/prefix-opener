@@ -1,0 +1,32 @@
+# Maintainer: Francesco <chiccocarone@gmail.com>
+
+pkgname=prefix-opener
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Search and open Steam Proton prefixes'
+arch=('any')
+url='https://github.com/chicco-carone/prefix-opener'
+license=('GPL-3.0-only')
+depends=('python' 'python-rich' 'python-textual' 'python-typer' 'xdg-utils')
+makedepends=('git' 'python-build' 'python-installer' 'python-uv-build')
+source=("$pkgname::git+$url.git#branch=main")
+sha256sums=('SKIP')
+
+build() {
+  cd "$srcdir/$pkgname"
+  python -m build \
+    --wheel \
+    --no-isolation
+}
+
+check() {
+  cd "$srcdir/$pkgname"
+  PYTHONPATH=src python -m unittest discover -s tests
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  /usr/bin/python -m installer \
+    --destdir="$pkgdir" \
+    dist/*.whl
+}
