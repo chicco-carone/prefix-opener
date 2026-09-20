@@ -74,7 +74,7 @@ class PCGamingWikiTests(unittest.TestCase):
         self.assertEqual(request_json.call_args_list[2].args[0]["section"], "5")
 
     @patch("prefix_opener.pcgamingwiki._request_json")
-    def test_falls_back_to_first_game_name_search_result(self, request_json) -> None:
+    def test_trims_exe_from_non_steam_game_name_search(self, request_json) -> None:
         request_json.side_effect = [
             {"query": {"search": [{"title": "Example Game"}]}},
             {
@@ -88,7 +88,7 @@ class PCGamingWikiTests(unittest.TestCase):
         ]
 
         self.assertEqual(
-            lookup_windows_save_paths("4294967295", "Example Game"),
+            lookup_windows_save_paths("4294967295", "Example Game.exe"),
             [r"%APPDATA%\Studio\Game\<user-id>"],
         )
         search_parameters = request_json.call_args_list[0].args[0]

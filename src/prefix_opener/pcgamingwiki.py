@@ -130,11 +130,16 @@ def lookup_windows_save_paths(app_id: str, game_name: str | None = None) -> list
     if page is None:
         if not game_name:
             raise PCGamingWikiError("No PCGamingWiki page found for this game")
+        search_name = (
+            game_name[:-4]
+            if is_non_steam and game_name.casefold().endswith(".exe")
+            else game_name
+        )
         search_result = _request_json(
             {
                 "action": "query",
                 "list": "search",
-                "srsearch": game_name,
+                "srsearch": search_name,
                 "srnamespace": "0",
                 "srlimit": "1",
                 "format": "json",
